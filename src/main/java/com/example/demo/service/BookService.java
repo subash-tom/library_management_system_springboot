@@ -1,17 +1,27 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Book;
-
+import com.example.demo.repository.BookRepository;
 @Service
 public class BookService {
-    public Book getBook() {
-        return new Book("java", "james gosling", 599.00f);
-    }
+private final BookRepository repository;
+    public BookService(BookRepository repository) { 
+        this.repository = repository;
+    }   
 
     public Book addBook(Book book) {
-        return book;
+        return repository.save(book);
+    }
+public List<Book> getAllBooks() {
+        return repository.findAll();
+    }
+
+    public Book getBookById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
     }
 }
 
